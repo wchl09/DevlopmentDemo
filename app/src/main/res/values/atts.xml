@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DragDrawerLayout">
+        <attr name="handler" format="reference" />
+        <attr name="content" format="reference" />
+        <attr name="handle_Top" format="integer" />
+        <attr name="handle_Bottom" format="integer" />
+    </declare-styleable>
+</resources>

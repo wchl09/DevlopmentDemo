@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.emilsjolander.components.StickyScrollViewItems.StickyScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fadingEdge="none"
+    android:fillViewport="true"
+    android:overScrollMode="never">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/showMyImageView"
+            style="@style/TextViewStyles"
+            android:text="带时差效果的ImageView"
+            android:background="#ffa0ff" />
+
+        <TextView
+            android:id="@+id/showDragLayout"
+            style="@style/TextViewStyles"
+            android:text="从下往上打开的抽屉"
+            android:background="#ff0000"
+            android:tag="sticky" />
+
+        <TextView
+            android:id="@+id/showMyScrollView"
+            android:text="下拉放大的ScrollView"
+            style="@style/TextViewStyles"
+            android:background="#00ff00" />
+
+        <TextView
+            style="@style/TextViewStyles"
+            android:background="#ffffff" />
+
+        <TextView
+            style="@style/TextViewStyles"
+            android:background="#0000ff" />
+
+        <View
+            android:layout_height="800dp"
+            android:layout_width="match_parent"
+            android:background="#00ffff" />
+
+    </LinearLayout>
+</com.emilsjolander.components.StickyScrollViewItems.StickyScrollView>
