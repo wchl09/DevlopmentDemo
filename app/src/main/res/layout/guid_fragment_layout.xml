@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.emilsjolander.components.StickyScrollViewItems.StickyScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.emilsjolander.components.StickyScrollViewItems.StickyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fadingEdge="none"
@@ -16,34 +15,40 @@
         <TextView
             android:id="@+id/showMyImageView"
             style="@style/TextViewStyles"
-            android:text="带时差效果的ImageView"
-            android:background="#ffa0ff" />
+            android:background="#ffa0ff"
+            android:text="带时差效果的ImageView" />
 
         <TextView
             android:id="@+id/showDragLayout"
             style="@style/TextViewStyles"
-            android:text="从下往上打开的抽屉"
             android:background="#ff0000"
-            android:tag="sticky" />
+            android:tag="sticky"
+            android:text="从下往上打开的抽屉" />
 
         <TextView
             android:id="@+id/showMyScrollView"
-            android:text="下拉放大的ScrollView"
             style="@style/TextViewStyles"
-            android:background="#00ff00" />
+            android:background="#00ff00"
+            android:text="下拉放大的ScrollView" />
 
         <TextView
+            android:id="@+id/showDrawerLayout"
             style="@style/TextViewStyles"
-            android:background="#ffffff" />
+            android:background="#ffffff"
+            android:text="原生的抽屉布局" />
 
         <TextView
+            android:id="@+id/scrollingActivity"
             style="@style/TextViewStyles"
-            android:background="#0000ff" />
+            android:background="#0000ff"
+            android:text="原生的滚动放大Head" />
 
-        <View
-            android:layout_height="800dp"
+        <TextView
+            android:id="@+id/bitmapOPtions"
             android:layout_width="match_parent"
-            android:background="#00ffff" />
+            android:layout_height="800dp"
+            android:background="#00ffff"
+            android:text="测试图片Options" />
 
     </LinearLayout>
 </com.emilsjolander.components.StickyScrollViewItems.StickyScrollView>

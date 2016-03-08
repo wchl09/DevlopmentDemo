@@ -2,6 +2,7 @@ package ray.com.test;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -15,6 +16,7 @@ public class MoveImageViewActivity extends AppCompatActivity implements View.OnC
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e(MainActivity.TAG,getClass().getName()+"onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main2);
 
@@ -95,5 +97,41 @@ public class MoveImageViewActivity extends AppCompatActivity implements View.OnC
             myImageView.setImageDrawable(getDrawable(imageId));
             return myImageView;
         }
+    }
+
+    @Override
+    protected void onStart() {
+        Log.e(MainActivity.TAG, getClass().getName()+"onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.e(MainActivity.TAG, getClass().getName()+"onRestart");
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.e(MainActivity.TAG, getClass().getName()+"onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.e(MainActivity.TAG, getClass().getName()+"onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.e(MainActivity.TAG,getClass().getName()+ "onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.e(MainActivity.TAG, getClass().getName()+"onDestroy");
+        super.onDestroy();
     }
 }

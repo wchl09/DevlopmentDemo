@@ -1,10 +1,10 @@
 package ray.com.test;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.RectF;
+import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -20,6 +20,9 @@ import android.widget.ImageView;
  * <p>
  * PS:只写了上下的视差效果，左右的视差原理也一样
  * </p>
+ * <p>
+ * 改为使用Drawable.draw(canvas)方法画图片，在Drawable的setBounds方法中来控制图片移动。原理：把图片放大再画到控件中，所以只能画出来显示的部分，上下左右放大的距离是可以控制的
+ * </p>
  * Created by wangchunlei on 16/1/14.
  */
 public class MyImageView extends ImageView {
@@ -31,7 +34,7 @@ public class MyImageView extends ImageView {
     /**
      * 要绘制的图片
      */
-    private Bitmap mBitmap;
+    private Drawable mBitmap;
     /**
      * 视差度数，是组件到可以滚动的父组件的上下的高度分别乘以度数
      */
@@ -59,7 +62,7 @@ public class MyImageView extends ImageView {
         if (parentRect.height() == 0 && getParent() != null) {
             findListView(this);
             bitmapLeft = getBitmapLeft();
-            bitmapRight = mBitmap.getWidth() - bitmapLeft;
+            bitmapRight = mBitmap.getIntrinsicWidth() - bitmapLeft;
         }
         drawBitmap(canvas);
     }
@@ -85,21 +88,35 @@ public class MyImageView extends ImageView {
      */
     private void drawBitmap(Canvas canvas) {
         if (mBitmap == null) {
-            mBitmap = ((BitmapDrawable) getDrawable()).getBitmap();
+            mBitmap = getDrawable();
             return;
         }
         getGlobalVisibleRect(thisRect);
         int top = getTopHeight();
         int bottom = getBottomHeight();
-        Rect src = new Rect(bitmapLeft, top, bitmapRight, mBitmap.getHeight() - bottom);
-        Rect dst = new Rect(0, 0, getWidth(), getHeight());
-        canvas.drawBitmap(mBitmap, src, dst, null);
+        Rect src = new Rect(bitmapLeft, top, bitmapRight, mBitmap.getIntrinsicHeight() - bottom);
+        Rect dst = new Rect(100, 100, getWidth() - 100, getHeight() - 100);
+        Rect n = new Rect(-bitmapLeft, -top, mBitmap.getIntrinsicWidth() + bitmapRight, mBitmap.getIntrinsicHeight() << 1 - bottom);
+        Rect n2 = new Rect(-bitmapLeft, -top, mBitmap.getIntrinsicWidth() + bitmapLeft, mBitmap.getIntrinsicHeight() + bottom);
+
+//        BitmapDrawable
+//        canvas.drawBitmap(mBitmap, src, dst, null);
+//        canvas.setMatrix(new Matrix());
+        mBitmap.setBounds(n2);
+        canvas.clipRect(dst);
+        RectF rectF = new RectF(100f, 100f, 100f, 100f);
+        if (!canvas.quickReject(rectF, Canvas.EdgeType.AA)) {//如果有相交区域
+            canvas.clipRect(rectF, Region.Op.DIFFERENCE);//去除该区域,Region.Op.DIFFERENCE去除这个矩阵不画
+        }
+//        canvas.clipRegion()
+        canvas.save();
+        mBitmap.draw(canvas);
     }
 
     @Override
     public void setImageDrawable(Drawable drawable) {
         if (drawable != null) {
-            mBitmap = ((BitmapDrawable) drawable).getBitmap();
+            mBitmap = drawable;
             invalidate();
         }
 //        super.setImageDrawable();
@@ -115,9 +132,9 @@ public class MyImageView extends ImageView {
         if (thisRect.top <= parentRect.top) {//超出后返回0
             return 0;
         } else if (thisRect.bottom >= parentRect.bottom) {//如果是下边超出，高度就不用变化
-            return (int) (mBitmap.getHeight() * Double.valueOf(parentRect.height() - getHeight()) / parentRect.height() * radius);
+            return (int) (mBitmap.getIntrinsicHeight() * Double.valueOf(parentRect.height() - getHeight()) / parentRect.height() * radius);
         }
-        return (int) (mBitmap.getHeight() * Double.valueOf(thisRect.top - parentRect.top) / parentRect.height() * radius);
+        return (int) (mBitmap.getIntrinsicHeight() * Double.valueOf(thisRect.top - parentRect.top) / parentRect.height() * radius);
     }
 
     /**
@@ -129,9 +146,9 @@ public class MyImageView extends ImageView {
         if (thisRect.bottom >= parentRect.bottom) {//超出后返回0
             return 0;
         } else if (thisRect.top <= parentRect.top) {//如果是上边超出，高度就不能变化了
-            return (int) (mBitmap.getHeight() * Double.valueOf(parentRect.height() - getHeight()) / parentRect.height() * radius);
+            return (int) (mBitmap.getIntrinsicHeight() * Double.valueOf(parentRect.height() - getHeight()) / parentRect.height() * radius);
         }
-        return (int) (mBitmap.getHeight() * Double.valueOf(parentRect.bottom - thisRect.bottom) / parentRect.height() * radius);
+        return (int) (mBitmap.getIntrinsicHeight() * Double.valueOf(parentRect.bottom - thisRect.bottom) / parentRect.height() * radius);
     }
 
     /**
@@ -144,11 +161,11 @@ public class MyImageView extends ImageView {
 //         (parentRect.height() - ((parentRect.height() - getHeight()) * radius)) / parentRect.height() * mBitmap.getHeight() * getWidth() / getHeight();
         //分解上边的公式
         float scale = Float.valueOf(getWidth()) / getHeight();
-        float width = (1 - radius + getHeight() * radius / parentRect.height()) * mBitmap.getHeight() * scale;
-        if (width > mBitmap.getWidth()) {
+        float width = (1 - radius + getHeight() * radius / parentRect.height()) * mBitmap.getIntrinsicHeight() * scale;
+        if (width > mBitmap.getIntrinsicWidth()) {
             return 0;
         } else {
-            return (int) ((mBitmap.getWidth() - width)) >> 1;
+            return (int) ((mBitmap.getIntrinsicWidth() - width)) >> 1;
         }
     }
 
@@ -162,9 +179,14 @@ public class MyImageView extends ImageView {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         if (mBitmap != null)
-            mBitmap.recycle();
+            mBitmap.clearColorFilter();
         super.onDetachedFromWindow();
     }
 }

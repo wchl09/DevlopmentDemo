@@ -1,6 +1,7 @@
 package ray.com.test;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,17 +14,16 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.webkit.WebView;
 
 public class MainActivity extends AppCompatActivity {
-
+    public static final String TAG = "Ray";
     /**
      * The {@link PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -43,14 +43,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+//        setTheme(R.style.AppTheme_NoActionBar);
         setContentView(R.layout.activity_main);
         String a = "Rayon";
-        System.out.println(a);
-
+        Log.e(TAG, getClass().getName()+"onCreate");
 //        HttpClient client;
-        Window window = getWindow();
-        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        Window window = getWindow();
+//        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 //        StickyScrollView
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
 //        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
 
     }
 
@@ -138,15 +137,92 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        public void onCreate(Bundle savedInstanceState) {
+            Log.e(TAG, getClass().getName()+"onCreate");
+            super.onCreate(savedInstanceState);
+        }
+
+        @Override
+        public void onAttach(Context context) {
+            Log.e(TAG, getClass().getName()+"onAttach");
+            super.onAttach(context);
+        }
+
+        @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
+            Log.e(TAG, getClass().getName()+"onActivityCreated");
+            super.onActivityCreated(savedInstanceState);
+        }
+
+        @Override
+        public void onDestroy() {
+            Log.e(TAG, getClass().getName()+"onDestroy");
+            super.onDestroy();
+        }
+
+        @Override
+        public void onDetach() {
+            Log.e(TAG, getClass().getName()+"onDetach");
+            super.onDetach();
+        }
+
+        @Override
+        public void onDestroyView() {
+            Log.e(TAG, getClass().getName()+"onDestroyView");
+            super.onDestroyView();
+        }
+
+        @Override
+        public void onPause() {
+            Log.e(TAG, getClass().getName()+"onPause");
+            super.onPause();
+        }
+
+        @Override
+        public void onResume() {
+            Log.e(TAG, getClass().getName()+"onResume");
+            super.onResume();
+        }
+
+        @Override
+        public void onViewStateRestored(Bundle savedInstanceState) {
+            Log.e(TAG, getClass().getName()+"onViewStateRestored");
+            super.onViewStateRestored(savedInstanceState);
+        }
+
+        @Override
+        public void onStart() {
+            Log.e(TAG, getClass().getName()+"onStart");
+            super.onStart();
+        }
+
+        @Override
+        public void onStop() {
+            Log.e(TAG, getClass().getName()+"onStop");
+            super.onStop();
+        }
+
+        @Override
+        public void onViewCreated(View view, Bundle savedInstanceState) {
+            Log.e(TAG, getClass().getName()+"onViewCreated");
+            super.onViewCreated(view, savedInstanceState);
+        }
+
+        @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            Log.e(TAG, getClass().getName()+"onCreateView");
             View rootView = null;
             int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             if (sectionNumber == 1) {
+
                 rootView = inflater.inflate(R.layout.guid_fragment_layout, container, false);
                 rootView.findViewById(R.id.showMyImageView).setOnClickListener(this);
                 rootView.findViewById(R.id.showDragLayout).setOnClickListener(this);
                 rootView.findViewById(R.id.showMyScrollView).setOnClickListener(this);
+                rootView.findViewById(R.id.showDrawerLayout).setOnClickListener(this);
+                rootView.findViewById(R.id.scrollingActivity).setOnClickListener(this);
+                rootView.findViewById(R.id.bitmapOPtions).setOnClickListener(this);
             } else {
                 rootView = inflater.inflate(R.layout.fragment_main, container, false);
                 WebView webView = (WebView) rootView.findViewById(R.id.web);
@@ -161,13 +237,22 @@ public class MainActivity extends AppCompatActivity {
             Class<?> cls = null;
             switch (v.getId()) {
                 case R.id.showMyImageView://打开带视差动画的ImageView
-                    cls=MoveImageViewActivity.class;
+                    cls = MoveImageViewActivity.class;
                     break;
                 case R.id.showDragLayout:
-                    cls=DragLayoutActivity.class;
+                    cls = DragLayoutActivity.class;
                     break;
                 case R.id.showMyScrollView://可以超出边界的Scrollview
-                    cls=ScrollViewActivity.class;
+                    cls = ScrollViewActivity.class;
+                    break;
+                case R.id.showDrawerLayout:
+                    cls = Main22Activity.class;
+                    break;
+                case R.id.scrollingActivity:
+                    cls = ScrollingActivity.class;
+                    break;
+                case R.id.bitmapOPtions:
+                    cls = Main23Activity.class;
                     break;
             }
             startActivity(new Intent(getContext(), cls));
@@ -213,5 +298,40 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        Log.e(TAG, getClass().getName()+"onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.e(TAG, getClass().getName()+"onRestart");
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.e(TAG, getClass().getName()+"onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.e(TAG, getClass().getName()+"onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.e(TAG,getClass().getName()+ "onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.e(TAG, getClass().getName()+"onDestroy");
+        super.onDestroy();
+    }
 }
 
